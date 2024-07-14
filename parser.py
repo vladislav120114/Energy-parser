@@ -174,7 +174,7 @@ def get_data(links, type, count):
                         translator.translate(p_name),
                         translator.translate(o_name)
                         ])
-        print(arr[count-1])
+        print(arr[count])
     return arr
 
 #Функция сохрания файла
@@ -208,7 +208,7 @@ if __name__ == "__main__":
     date_choice()
     cpvs()
 
-    tend1 = get_data(get_links(1), 1, 0)
+    tend1 = get_data(get_links(1), 1, 1)
     tend2 = get_data(get_links(2), 2, tend1[-1][0])
     tenders += tend1 + tend2
     save_tenders(tenders)
