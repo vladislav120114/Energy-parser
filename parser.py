@@ -48,7 +48,7 @@ def date_choice():
                 print("Введите нужную дату для выгрузки данных (Формат: ДД.ММ.ГГГГ):")
                 date = str(input()).split(".")
                 data.json_data["SearchFilter"][
-                    "tenderCreationTimeFrom"] = f'{date[2]}-{date[1]}-{date[0]}T00:00:01.000Z'
+                    "tenderCreationTimeFrom"] = f'{date[2]}-{date[1]}-{date[0]}T00:00:00.000Z'
                 data.json_data["SearchFilter"]["tenderCreationTimeTo"] = f'{date[2]}-{date[1]}-{date[0]}T23:59:59.000Z'
             except:
                 print("Некорректный ввод. Попробуйте еще раз.")
@@ -106,6 +106,7 @@ def get_links(type):
 
 #Функция получения данных из тендеров
 def get_data(links, type, count):
+    arr = []
     for link in links:
         try:
             parts = link.split("/")
@@ -158,7 +159,7 @@ def get_data(links, type, count):
                 endDate = page["result"]["tenderPeriod"]["endDate"].split("T")[0].split("-")
                 endDate = endDate[2] + "." + endDate[1] + "." + endDate[0]
 
-        tenders.append([count,
+        arr.append([count,
                         translator.translate(page["result"]["title"]),
                         page["result"]["status"],
                         quantity,
@@ -173,8 +174,8 @@ def get_data(links, type, count):
                         translator.translate(p_name),
                         translator.translate(o_name)
                         ])
-        print(tenders[count])
-    return count
+        print(arr[count-1])
+    return arr
 
 #Функция сохрания файла
 def save_tenders(tenders):
@@ -207,8 +208,7 @@ if __name__ == "__main__":
     date_choice()
     cpvs()
 
-    links = get_links(1)
-    count = get_data(links, 1, count)
-    links = get_links(2)
-    get_data(links, 2, count)
+    tend1 = get_data(get_links(1), 1, 0)
+    tend2 = get_data(get_links(2), 2, tend1[-1][0])
+    tenders += tend1 + tend2
     save_tenders(tenders)
