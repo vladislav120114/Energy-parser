@@ -1,10 +1,10 @@
 import json
-
 from deep_translator import GoogleTranslator
 from openpyxl import Workbook
 import requests
 import math
 import data
+from datetime import datetime, timedelta
 
 #Функция для выполнения запросов
 def data_request(type, cookies, headers, json_data):
@@ -46,11 +46,16 @@ def date_choice():
         case "1":
             try:
                 print("Введите нужную дату для выгрузки данных (Формат: ДД.ММ.ГГГГ):")
-                date = str(input()).split(".")
+                date = str(input())
+                date1 = datetime.strptime(date, '%d.%m.%Y')
+                date2 = date.split('.')
+                date1 = str(date1 - timedelta(1)).split(' ')[0].split('-')
+                print(date1, date2)
                 data.json_data["SearchFilter"][
-                    "tenderCreationTimeFrom"] = f'{date[2]}-{date[1]}-{date[0]}T00:00:00.000Z'
-                data.json_data["SearchFilter"]["tenderCreationTimeTo"] = f'{date[2]}-{date[1]}-{date[0]}T23:59:59.000Z'
-            except:
+                    "tenderCreationTimeFrom"] = f'{date1[0]}-{date1[1]}-{date1[2]}T17:00:00.000Z'
+                data.json_data["SearchFilter"][
+                    "tenderCreationTimeTo"] = f'{date2[2]}-{date2[1]}-{date2[0]}T17:00:00.000Z'
+            except Exception:
                 print("Некорректный ввод. Попробуйте еще раз.")
                 date_choice()
         case "2":
